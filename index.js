@@ -48,7 +48,7 @@ async function run() {
         const usersCollection = database.collection('users');
 
         app.get('/users', async (req, res) => {
-            const cursor = doctorsCollection.find({});
+            const cursor = usersCollection.find({});
             const users = await cursor.toArray();
             res.json(users);
         });
