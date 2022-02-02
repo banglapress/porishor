@@ -47,6 +47,12 @@ async function run() {
         const LeadPostCollection = database.collection('leadpost');
         const usersCollection = database.collection('users');
 
+        app.get('/users', async (req, res) => {
+            const cursor = doctorsCollection.find({});
+            const users = await cursor.toArray();
+            res.json(users);
+        });
+
         app.get('users/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
