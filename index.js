@@ -46,8 +46,30 @@ async function run() {
     try {
         await client.connect();
         const database = client.db('ahlesuffa');
-        const LeadPostCollection = database.collection('leadpost');
+        const leadPostCollection = database.collection('leadpost');
+        const allPostCollection = database.collection('allPost');
         const usersCollection = database.collection('users');
+
+
+        app.post('/allposts', async (req, res) => {
+            const post = req.body;
+            console.log('hit the all post api')
+            const result = await allPostCollection.insertOne(post);
+            res.json(result);
+        })
+
+        app.get('/allposts', async (req, res) => {
+            const cursor = allPostCollection.find({});
+            const posts = await cursor.toArray();
+            res.send(posts);
+        })
+
+        app.get('/allposts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const post = await allPostCollection.findOne(query);
+            res.json(post);
+        })
 
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
