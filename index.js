@@ -5,7 +5,7 @@ const admin = require("firebase-admin");
 require('dotenv').config()
 const { MongoClient } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
-
+const fileUpload = require('express-fileupload');
 
 
 const port = process.env.PORT || 5000;
@@ -21,6 +21,7 @@ admin.initializeApp({
 
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dbsda.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
@@ -50,19 +51,30 @@ async function run() {
         const allPostCollection = database.collection('allPost');
         const usersCollection = database.collection('users');
 
-
-        app.post('/allposts', async (req, res) => {
-            const post = req.body;
-            console.log('hit the all post api')
-            const result = await allPostCollection.insertOne(post);
-            res.json(result);
-        })
-
         app.get('/allposts', async (req, res) => {
             const cursor = allPostCollection.find({});
             const posts = await cursor.toArray();
             res.send(posts);
         })
+
+        app.post('/allposts', async (req, res) => {
+            const headline = req.body.headline;
+            const excerpt = req.body.excerpt;
+            const detail = req.body.detail;
+            const pic = req.files.image;
+            const picData = pic.data;
+            const encodedPic = picData.toString('base64');
+            const imageBuffer = Buffer.from(encodedPic, 'base64')
+            const post = {
+                headline,
+                excerpt,
+                detail,
+                image: imageBuffer
+            }
+            const result = await allPostCollection.insertOne(post);
+            res.json(result);
+        })
+
 
         app.get('/allposts/:id', async (req, res) => {
             const id = req.params.id;
