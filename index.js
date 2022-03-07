@@ -58,6 +58,7 @@ async function run() {
         })
 
         app.post('/allposts', async (req, res) => {
+            const richText = req.body.richText;
             const headline = req.body.headline;
             const excerpt = req.body.excerpt;
             const detail = req.body.detail;
@@ -66,6 +67,7 @@ async function run() {
             const encodedPic = picData.toString('base64');
             const imageBuffer = Buffer.from(encodedPic, 'base64')
             const post = {
+                richText,
                 headline,
                 excerpt,
                 detail,
