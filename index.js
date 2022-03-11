@@ -57,11 +57,13 @@ async function run() {
             res.send(posts);
         })
 
+
+
         app.post('/allposts', async (req, res) => {
             const richText = req.body.richText;
             const headline = req.body.headline;
             const excerpt = req.body.excerpt;
-            const detail = req.body.detail;
+            const category = req.body.category;
             const pic = req.files.image;
             const picData = pic.data;
             const encodedPic = picData.toString('base64');
@@ -70,7 +72,7 @@ async function run() {
                 richText,
                 headline,
                 excerpt,
-                detail,
+                category,
                 image: imageBuffer
             }
             const result = await allPostCollection.insertOne(post);
@@ -84,6 +86,18 @@ async function run() {
             const post = await allPostCollection.findOne(query);
             res.json(post);
         })
+
+        app.get('/allposts/:category', async (req, res) => {
+            let query = {};
+            const category = req.params.category;
+            if (category) {
+                query = { category: category };
+            }
+            const cursor = allPostCollection.find({});
+            const posts = await cursor.toArray();
+            res.json(post);
+        })
+
 
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
