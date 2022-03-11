@@ -58,7 +58,6 @@ async function run() {
         })
 
 
-
         app.post('/allposts', async (req, res) => {
             const richText = req.body.richText;
             const headline = req.body.headline;
@@ -100,7 +99,7 @@ async function run() {
 
 
         app.get('/users/:email', async (req, res) => {
-            const email = req.params.email;
+            const email = req.query.email;
             const query = { email: email };
             const user = await usersCollection.findOne(query);
             let isAdmin = false;
