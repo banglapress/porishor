@@ -88,16 +88,13 @@ async function run() {
         })
 
         app.get('/allposts/:category', async (req, res) => {
-            const category = req.query.category;
-            let query = {};
-            if (category) {
-                query = { category: category };
-            }
-            const cursor = allPostCollection.find({});
+            const id = req.params.category;
+            const category = { category: category };
+            const cursor = await allPostCollection.find(category);
             const posts = await cursor.toArray();
             res.json(posts);
         })
-
+        // [ekhane kono ekta problem ache]
 
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
