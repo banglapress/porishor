@@ -88,7 +88,7 @@ async function run() {
         })
 
         app.get('/allposts/:category', async (req, res) => {
-            const category = req.params.category;
+            const category = req.query.category;
             let query = {};
             if (category) {
                 query = { category: category };
