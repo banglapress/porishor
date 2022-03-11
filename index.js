@@ -58,6 +58,7 @@ async function run() {
         })
 
 
+
         app.post('/allposts', async (req, res) => {
             const richText = req.body.richText;
             const headline = req.body.headline;
@@ -87,19 +88,19 @@ async function run() {
         })
 
         app.get('/allposts/:category', async (req, res) => {
-            let query = {};
             const category = req.params.category;
+            let query = {};
             if (category) {
                 query = { category: category };
             }
             const cursor = allPostCollection.find({});
             const posts = await cursor.toArray();
-            res.json(post);
+            res.json(posts);
         })
 
 
         app.get('/users/:email', async (req, res) => {
-            const email = req.query.email;
+            const email = req.params.email;
             const query = { email: email };
             const user = await usersCollection.findOne(query);
             let isAdmin = false;
