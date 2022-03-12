@@ -52,7 +52,12 @@ async function run() {
         const usersCollection = database.collection('users');
 
         app.get('/allposts', async (req, res) => {
-            const cursor = allPostCollection.find({});
+            let query = {};
+            const category = req.query.category;
+            if (category) {
+                query = { category: category };
+            }
+            const cursor = await allPostCollection.find(query);
             const posts = await cursor.toArray();
             res.send(posts);
         })
@@ -84,15 +89,6 @@ async function run() {
             const post = await allPostCollection.findOne(query);
             res.json(post);
         })
-
-        // app.get('/allposts/:category', async (req, res) => {
-        //     const id = req.params.category;
-        //     const category = { category: category };
-        //     const cursor = await allPostCollection.find(category);
-        //     const posts = await cursor.toArray();
-        //     res.json(posts);
-        // })
-        // [ekhane kono ekta problem ache]
 
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
