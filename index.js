@@ -52,16 +52,10 @@ async function run() {
         const usersCollection = database.collection('users');
 
         app.get('/allposts', async (req, res) => {
-            let query = {};
-            const category = req.query.category;
-            if (category) {
-                query = { category: category };
-            }
-            const cursor = allPostCollection.find(query);
+            const cursor = allPostCollection.find({});
             const posts = await cursor.toArray();
             res.send(posts);
         })
-
 
         app.post('/allposts', async (req, res) => {
             const richText = req.body.richText;
